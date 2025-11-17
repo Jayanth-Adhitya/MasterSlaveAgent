@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
+import os
 
 
 class Settings(BaseSettings):
@@ -21,12 +22,18 @@ class Settings(BaseSettings):
     app_name: str = "Agent Prototype"
     debug: bool = True
 
-    class Config:
-        env_file = "../.env"  # Look for .env in parent directory (project root)
-        extra = "ignore"
-        case_sensitive = False
+    model_config = SettingsConfigDict(
+        # Try multiple .env locations for different environments
+        env_file=(".env", "../.env"),
+        env_file_encoding="utf-8",
+        extra="ignore",
+        case_sensitive=False,
+    )
 
 
 @lru_cache()
 def get_settings() -> Settings:
+    # Clear cache if in Docker (to re-read environment variables)
+    if os.environ.get("DATABASE_URL"):
+        get_settings.cache_clear()
     return Settings()

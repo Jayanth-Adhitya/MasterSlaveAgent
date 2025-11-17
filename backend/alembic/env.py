@@ -1,8 +1,9 @@
 import asyncio
+import os
 from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
-from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlalchemy.ext.asyncio import async_engine_from_config, create_async_engine
 from alembic import context
 
 # Import models so they are registered with Base.metadata
@@ -15,9 +16,13 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
+# Override with environment variable if set
+def get_url():
+    return os.environ.get("DATABASE_URL", config.get_main_option("sqlalchemy.url"))
+
 
 def run_migrations_offline() -> None:
-    url = config.get_main_option("sqlalchemy.url")
+    url = get_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -37,11 +42,19 @@ def do_run_migrations(connection: Connection) -> None:
 
 
 async def run_async_migrations() -> None:
-    connectable = async_engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+    # Use environment variable if set, otherwise fall back to config
+    database_url = get_url()
+
+    if database_url and database_url != config.get_main_option("sqlalchemy.url"):
+        # Use environment variable
+        connectable = create_async_engine(database_url, poolclass=pool.NullPool)
+    else:
+        # Fall back to config file
+        connectable = async_engine_from_config(
+            config.get_section(config.config_ini_section, {}),
+            prefix="sqlalchemy.",
+            poolclass=pool.NullPool,
+        )
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
