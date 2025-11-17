@@ -21,6 +21,21 @@ asyncio.run(check())
     sleep 2
 done
 
+# Enable pgvector extension (required for vector type)
+echo "Enabling pgvector extension..."
+python -c "
+import asyncio
+from sqlalchemy import text
+from app.core.database import engine
+
+async def enable_vector():
+    async with engine.begin() as conn:
+        await conn.execute(text('CREATE EXTENSION IF NOT EXISTS vector'))
+    print('pgvector extension enabled')
+
+asyncio.run(enable_vector())
+"
+
 # Create tables if they don't exist (always run this for safety)
 echo "Ensuring database tables exist..."
 python -c "
