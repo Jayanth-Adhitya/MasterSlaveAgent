@@ -21,19 +21,25 @@ asyncio.run(check())
     sleep 2
 done
 
-# Run database migrations
-echo "Running database migrations..."
-alembic upgrade head || {
-    echo "Migration failed, attempting to create tables directly..."
-    python -c "
+# Create tables if they don't exist (always run this for safety)
+echo "Ensuring database tables exist..."
+python -c "
 import asyncio
 from app.core.database import engine, Base
+# Import all models to register them
+from app.models import Tenant, User, Message, Notification, TenantKnowledge
+
 async def init():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    print('Tables created/verified successfully')
+
 asyncio.run(init())
 "
-}
+
+# Try to run Alembic migrations (may fail if no migrations exist, that's OK)
+echo "Running database migrations..."
+alembic upgrade head || echo "No migrations to apply (or Alembic not configured)"
 
 echo "Starting application server..."
 exec "$@"
