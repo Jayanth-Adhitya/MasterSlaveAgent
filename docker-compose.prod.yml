@@ -117,12 +117,6 @@ services:
       - agent_network
     labels:
       - "coolify.managed=true"
-      # Traefik labels for Coolify routing (adjust domain as needed)
-      - "traefik.enable=true"
-      - "traefik.http.routers.agent-frontend.rule=Host(`${DOMAIN:-localhost}`)"
-      - "traefik.http.routers.agent-frontend.entrypoints=websecure"
-      - "traefik.http.routers.agent-frontend.tls=true"
-      - "traefik.http.services.agent-frontend.loadbalancer.server.port=80"
 
 volumes:
   postgres_data:
