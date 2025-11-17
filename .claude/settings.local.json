@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx openspec list)",
+      "Bash(npx openspec list:*)",
+      "WebSearch",
+      "Bash(npx openspec validate:*)",
+      "Bash(docker ps:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker exec:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(docker-compose down:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(timeout:*)",
+      "Bash(python scripts/seed_data.py:*)",
+      "Bash(venv/Scripts/pip.exe install:*)",
+      "WebFetch(domain:coolify.io)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
