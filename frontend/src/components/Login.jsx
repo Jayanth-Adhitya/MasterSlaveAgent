@@ -50,14 +50,19 @@ export function Login({ onLogin }) {
           {loading ? 'Logging in...' : 'Login'}
         </button>
         {error && <div className="error">{error}</div>}
-        <div style={{ marginTop: '20px', fontSize: '12px', color: '#666' }}>
-          <strong>Test accounts:</strong>
-          <br />
-          Restaurant: mario@pizza.com, luigi@pizza.com, peach@pizza.com
-          <br />
-          Property: john@oakst.com, jane@oakst.com, bob@oakst.com
-          <br />
-          Password: password123
+        <div style={{ marginTop: '20px', padding: '15px', background: '#f5f5f5', borderRadius: '8px', fontSize: '14px', color: '#333' }}>
+          <strong style={{ fontSize: '15px', color: '#000' }}>Demo Restaurant Accounts</strong>
+          <div style={{ marginTop: '10px', lineHeight: '1.8' }}>
+            <div><strong>Mario</strong> (Manager): <code>mario@pizza.com</code></div>
+            <div><strong>Luigi</strong> (Employee): <code>luigi@pizza.com</code></div>
+            <div><strong>Peach</strong> (Employee): <code>peach@pizza.com</code></div>
+            <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #ddd' }}>
+              <strong>Password:</strong> <code>password123</code>
+            </div>
+            <div style={{ marginTop: '10px', fontSize: '13px', color: '#666', fontStyle: 'italic' }}>
+              💡 Tip: Login as Mario to send messages. The AI can notify Luigi or Peach based on the restaurant schedule and roster.
+            </div>
+          </div>
         </div>
       </form>
     </div>
