@@ -11,19 +11,25 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-@router.websocket("/ws")
+@router.websocket("/ws/")
 async def websocket_endpoint(websocket: WebSocket, token: str = Query(...)):
     """WebSocket endpoint for real-time message updates."""
-    # Authenticate token
-    token_data = decode_access_token(token)
-    if not token_data:
-        await websocket.close(code=4001, reason="Invalid token")
-        return
+    try:
+        # Authenticate token
+        token_data = decode_access_token(token)
+        if not token_data:
+            logger.warning(f"Invalid token in WebSocket connection")
+            await websocket.close(code=4001, reason="Invalid token")
+            return
 
-    await websocket.accept()
-    logger.info(
-        f"WebSocket connected for user {token_data.user_id} tenant {token_data.tenant_id}"
-    )
+        await websocket.accept()
+        logger.info(
+            f"WebSocket connected for user {token_data.user_id} tenant {token_data.tenant_id}"
+        )
+    except Exception as e:
+        logger.error(f"Error during WebSocket handshake: {e}")
+        await websocket.close(code=4002, reason=str(e))
+        return
 
     redis = await get_redis()
     pubsub = redis.pubsub()

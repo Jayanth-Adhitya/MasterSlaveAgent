@@ -36,10 +36,10 @@ app = FastAPI(
 )
 
 # CORS middleware for frontend
-# In production, nginx handles this, but keeping it for flexibility
+# Allow all origins for WebSocket connections through proxy
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"] if settings.debug else ["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
