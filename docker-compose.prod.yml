@@ -122,10 +122,10 @@ services:
       - "caddy_0=https://master.uptpoint.net"
       - "caddy_0.encode=zstd gzip"
       - "caddy_0.handle_path=/*"
-      - "caddy_0.handle_path.0_reverse_proxy={{upstreams}}"
+      - "caddy_0.handle_path.0_reverse_proxy={{upstreams}} 80"
       - "caddy_0.header=-Server"
       - "caddy_0.try_files={path} /index.html"
-      - "caddy_ingress_network=coolify"
+      - "caddy_ingress_network=c0gwos80gwk04wo4g80sgwko"
 
 volumes:
   postgres_data:
