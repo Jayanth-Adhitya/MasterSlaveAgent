@@ -120,10 +120,8 @@ services:
     labels:
       - "coolify.managed=true"
       - "traefik.enable=true"
-      - "traefik.http.routers.agent-frontend.rule=Host(`master.uptpoint.net`)"
-      - "traefik.http.routers.agent-frontend.entrypoints=websecure"
-      - "traefik.http.routers.agent-frontend.tls=true"
-      - "traefik.http.routers.agent-frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.agent-frontend-http.rule=Host(`master.uptpoint.net`)"
+      - "traefik.http.routers.agent-frontend-http.entrypoints=web"
       - "traefik.http.services.agent-frontend.loadbalancer.server.port=80"
       - "traefik.docker.network=coolify"
 
