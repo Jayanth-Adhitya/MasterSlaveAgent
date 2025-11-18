@@ -28,7 +28,8 @@ FROM nginx:alpine
 # Install curl for health checks
 RUN apk add --no-cache curl
 
-# Copy custom nginx configuration
+# Copy custom nginx configurations
+COPY nginx-main.conf /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built assets from builder stage
