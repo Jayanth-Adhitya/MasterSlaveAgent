@@ -56,5 +56,9 @@ asyncio.run(init())
 echo "Running database migrations..."
 alembic upgrade head || echo "No migrations to apply (or Alembic not configured)"
 
+# Seed database with initial data (only runs if empty)
+echo "Seeding database..."
+python seed_db.py || echo "Seed skipped or already exists"
+
 echo "Starting application server..."
 exec "$@"
