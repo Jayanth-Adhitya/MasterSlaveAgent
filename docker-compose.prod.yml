@@ -115,10 +115,12 @@ services:
       retries: 3
     networks:
       - agent_network
+      - coolify
     labels:
       - "coolify.managed=true"
       - "traefik.enable=true"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
+      - "traefik.docker.network=coolify"
 
 volumes:
   postgres_data:
@@ -129,3 +131,5 @@ volumes:
 networks:
   agent_network:
     driver: bridge
+  coolify:
+    external: true
