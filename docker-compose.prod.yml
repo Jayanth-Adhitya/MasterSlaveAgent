@@ -119,11 +119,13 @@ services:
       - coolify
     labels:
       - "coolify.managed=true"
-      - "traefik.enable=true"
-      - "traefik.http.routers.agent-frontend-http.rule=Host(`master.uptpoint.net`)"
-      - "traefik.http.routers.agent-frontend-http.entrypoints=web"
-      - "traefik.http.services.agent-frontend.loadbalancer.server.port=80"
-      - "traefik.docker.network=coolify"
+      - "caddy_0=https://master.uptpoint.net"
+      - "caddy_0.encode=zstd gzip"
+      - "caddy_0.handle_path=/*"
+      - "caddy_0.handle_path.0_reverse_proxy={{upstreams}}"
+      - "caddy_0.header=-Server"
+      - "caddy_0.try_files={path} /index.html"
+      - "caddy_ingress_network=coolify"
 
 volumes:
   postgres_data:
